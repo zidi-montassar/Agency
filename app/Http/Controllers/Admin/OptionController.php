@@ -15,7 +15,7 @@ class OptionController extends Controller
     public function index()
     {
         return view('admin.options.index', [
-            'options' => Option::paginate(25)
+            'options' => Option::withTrashed()->paginate(25)
         ]);
     }
 

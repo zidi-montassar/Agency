@@ -6,10 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquant;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use phpDocumentor\Reflection\Types\Boolean;
+use PhpParser\Node\Expr\Cast\Bool_;
 
 class property extends Model
 {
     use HasFactory;
+
+    use SoftDeletes; 
 
     protected $fillable = [
             'title',
@@ -25,6 +32,7 @@ class property extends Model
             'sold'
     ];
 
+
     public function options(): BelongsToMany
     {
         return $this->belongsToMany(Option::class);
@@ -34,4 +42,15 @@ class property extends Model
     {
         return Str::slug($this->title);
     }
+
+    public function scopeAvailable(Builder $builder, Bool $available = true): Builder
+    {
+        return $builder->where('sold', !$available);
+    }
+
+    public function scopeRecent(Builder $builder): Builder
+    {
+        return $builder->orderBy('created_at', 'desc');
+    }
+    
 }
