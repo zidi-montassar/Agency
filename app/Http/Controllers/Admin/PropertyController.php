@@ -26,7 +26,8 @@ class PropertyController extends Controller
     public function create()
     {
         $property =  new property();
-        $property->fill([
+        $property
+            ->fill([
             'surface' => 25,
             'rooms' => 1,
             'floor' => 0,
